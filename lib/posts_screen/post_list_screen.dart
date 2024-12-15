@@ -28,28 +28,68 @@ class _PostListScreenState extends State<PostListScreen> {
         ),
       ),
       body: BlocBuilder<PostBloc, PostState>(builder: (context, state) {
-        if (state.posts.isEmpty) {
-          return const Center(child: Text('No Posts currently available'),);
-        }
-
-        return RefreshIndicator(
-          onRefresh: () async {
-            _getAllPosts();
+        return Expanded(
+          child: switch (state.status) {
+            Status.loading => _buildLoading(),
+            Status.empty => _buildEmpty(),
+            Status.success => _buildSuccess(state),
+            Status.failure => _buildError(),
           },
-          child: ListView.separated(
-            separatorBuilder: (context, index) => const SizedBox(height: 20),
-            itemCount: state.posts.length,
-            itemBuilder: (context, index) {
-              Post? currentPost = state.posts[index];
-
-              return PostListItem(
-                title: currentPost.title,
-                description: currentPost.description,
-              );
-            },
-          ),
         );
       }),
+    );
+  }
+
+  Widget _buildLoading() {
+    return const Center(
+        child: CircularProgressIndicator()
+    );
+  }
+
+  Widget _buildEmpty() {
+    return const Center(
+      child: Text('No Posts currently available'),
+    );
+  }
+
+  Widget _buildSuccess(PostState state) {
+    return RefreshIndicator(
+      onRefresh: () async {
+        _getAllPosts();
+      },
+      child: ListView.separated(
+        separatorBuilder: (context, index) => const SizedBox(height: 20),
+        itemCount: state.posts.length,
+        itemBuilder: (context, index) {
+          Post currentPost = state.posts[index];
+
+          return PostListItem(
+            title: currentPost.title,
+            description: currentPost.description,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildError() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text("Error fetching posts", style: TextStyle(fontSize: 20),),
+          ElevatedButton(
+            onPressed: _getAllPosts,
+            style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5), // Adjust this value to make it less round
+                )
+            ),
+            child: const Text("Retry"),
+          )
+        ],
+      ),
     );
   }
 
