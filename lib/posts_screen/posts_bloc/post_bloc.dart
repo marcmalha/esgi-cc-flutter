@@ -15,8 +15,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   PostBloc({required this.postRepository}) : super(const PostState()) {
     on<GetAllPosts>((event, emit) async {
-      Post post = await postRepository.getAllPosts();
-      emit(state.copyWith(post: post));
+      List<Post> posts = await postRepository.getAllPosts();
+      emit(state.copyWith(status: Status.success, posts: posts));
     });
   }
 }

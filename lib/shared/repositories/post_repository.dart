@@ -6,7 +6,7 @@ class PostRepository {
 
   PostRepository({required this.dataSource});
 
-  Future<Post> getAllPosts() async {
+  Future<List<Post>> getAllPosts() async {
     return dataSource.getAllPosts();
   }
 }
