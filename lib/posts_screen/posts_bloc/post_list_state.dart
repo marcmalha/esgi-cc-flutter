@@ -7,23 +7,22 @@ enum Status {
   failure,
 }
 
-class PostState {
+class PostListState {
   final Status status;
   final List<Post> posts;
   final AppException? exception;
 
-  const PostState({
+  const PostListState({
     this.status = Status.loading,
     this.posts = const [],
     this.exception,
   });
 
-  PostState copyWith({required Status status, List<Post> posts = const [], AppException? exception}) {
-    return PostState(
+  PostListState copyWith({required Status status, List<Post> posts = const [], AppException? exception}) {
+    return PostListState(
         status: status,
         posts: posts,
         exception: exception
     );
   }
-
 }
