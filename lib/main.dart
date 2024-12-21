@@ -1,6 +1,8 @@
+import 'package:cc_flutter/posts_screen/post_detail_screen.dart';
 import 'package:cc_flutter/posts_screen/post_list_screen.dart';
 import 'package:cc_flutter/posts_screen/posts_bloc/post_bloc.dart';
 import 'package:cc_flutter/shared/data_sources/post/fake_data_source.dart';
+import 'package:cc_flutter/shared/models/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,7 +26,22 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
             useMaterial3: true,
         ),
-        home: const PostListScreen(),
+        routes: {
+          '/': (context) => const PostListScreen(),
+        },
+        onGenerateRoute: (routeSettings) {
+          Widget screen = Container(color: Colors.pink);
+          final argument = routeSettings.arguments;
+          switch (routeSettings.name) {
+            case 'postDetail':
+              if (argument is Post) {
+                screen = PostDetailScreen(post: argument);
+              }
+              break;
+          }
+
+          return MaterialPageRoute(builder: (context) => screen);
+        },
       ),
     );
   }
