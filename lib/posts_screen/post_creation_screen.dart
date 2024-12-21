@@ -1,4 +1,4 @@
-import 'package:cc_flutter/main.dart';
+import 'package:cc_flutter/posts_screen/post_creation_bloc/post_creation_bloc.dart';
 import 'package:cc_flutter/posts_screen/post_list_bloc/post_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -87,9 +87,9 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
                             description: descriptionController.text,
                           );
 
-                          final postsBloc = context.read<PostBloc>();
-
-                          postsBloc.add(PostCreated(newPost));
+                          context.read<PostCreationBloc>()
+                              .add(PostCreated(newPost));
+                          _navigateBack();
                         }
                       },
                       child: const Text('Submit'),
@@ -101,5 +101,11 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
         })
       ),
     );
+  }
+
+  void _navigateBack() {
+    context.read<PostBloc>()
+        .add(GetAllPosts());
+    Navigator.pop(context);
   }
 }

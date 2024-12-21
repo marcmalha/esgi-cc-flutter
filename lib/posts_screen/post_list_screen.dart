@@ -8,6 +8,10 @@ import '../shared/models/post.dart';
 import 'widgets/post_list_item.dart';
 
 class PostListScreen extends StatefulWidget {
+  static Future<void> navigateTo(BuildContext context) {
+    return Navigator.pushNamed(context, '/');
+  }
+
   const PostListScreen({super.key});
 
   @override
@@ -30,7 +34,7 @@ class _PostListScreenState extends State<PostListScreen> {
         ),
       ),
       body: BlocBuilder<PostBloc, PostListState>(builder: (context, state) {
-        return Expanded(
+        return Container(
           child: switch (state.status) {
             Status.loading => _buildLoading(),
             Status.empty => _buildEmpty(),
@@ -55,9 +59,14 @@ class _PostListScreenState extends State<PostListScreen> {
   }
 
   Widget _buildEmpty() {
-    return const Center(
-      child: Text('No Posts currently available'),
-    );
+    return RefreshIndicator(
+      onRefresh: () async {
+        _getAllPosts();
+      },
+      child: const Center(
+          child: Text('No Posts currently available'),
+        )
+      );
   }
 
   Widget _buildSuccess(PostListState state) {

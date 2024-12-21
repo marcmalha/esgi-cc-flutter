@@ -1,3 +1,4 @@
+import 'package:cc_flutter/posts_screen/post_creation_bloc/post_creation_bloc.dart';
 import 'package:cc_flutter/posts_screen/post_creation_screen.dart';
 import 'package:cc_flutter/posts_screen/post_detail_screen.dart';
 import 'package:cc_flutter/posts_screen/post_list_bloc/post_bloc.dart';
@@ -19,8 +20,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (BuildContext context) => PostBloc(postRepository: PostRepository(dataSource: FakeDataSource())),
+    final postsRepository = PostRepository(dataSource: FakeDataSource());
+
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (BuildContext context) => PostBloc(postRepository: postsRepository),),
+          BlocProvider(create: (BuildContext context) => PostCreationBloc(postRepository: postsRepository), ),
+        ],
         child: MaterialApp(
           title: 'Flutter CC',
           theme: ThemeData(
