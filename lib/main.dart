@@ -1,6 +1,7 @@
+import 'package:cc_flutter/posts_screen/post_creation_screen.dart';
 import 'package:cc_flutter/posts_screen/post_detail_screen.dart';
+import 'package:cc_flutter/posts_screen/post_list_bloc/post_bloc.dart';
 import 'package:cc_flutter/posts_screen/post_list_screen.dart';
-import 'package:cc_flutter/posts_screen/posts_bloc/post_bloc.dart';
 import 'package:cc_flutter/shared/data_sources/post/fake_data_source.dart';
 import 'package:cc_flutter/shared/models/post.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           '/': (context) => const PostListScreen(),
+          '/create': (context) => const PostCreationScreen(),
         },
         onGenerateRoute: (routeSettings) {
           Widget screen = Container(color: Colors.pink);

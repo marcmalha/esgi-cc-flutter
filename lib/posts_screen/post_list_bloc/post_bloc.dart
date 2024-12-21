@@ -30,5 +30,10 @@ class PostBloc extends Bloc<PostEvent, PostListState> {
         debugPrint(exception.toString());
       }
     });
+
+  on<PostCreated>((event, emit) async {
+    final newPost = event.post;
+
+  });
   }
 }

@@ -1,9 +1,10 @@
+import 'package:cc_flutter/posts_screen/post_creation_screen.dart';
 import 'package:cc_flutter/posts_screen/post_detail_screen.dart';
+import 'package:cc_flutter/posts_screen/post_list_bloc/post_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../shared/models/post.dart';
-import 'posts_bloc/post_bloc.dart';
 import 'widgets/post_list_item.dart';
 
 class PostListScreen extends StatefulWidget {
@@ -39,9 +40,7 @@ class _PostListScreenState extends State<PostListScreen> {
         );
       }),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          debugPrint("Floating action button pressed on main screen");
-        },
+        onPressed: () => _onNewPostButtonPressed(context),
         icon: const Icon(Icons.add),
         label: const Text('New Post'),
         backgroundColor: Colors.white,
@@ -72,9 +71,12 @@ class _PostListScreenState extends State<PostListScreen> {
         itemBuilder: (context, index) {
           Post currentPost = state.posts[index];
 
-          return PostListItem(
-            post: currentPost,
-            onTap: () => _onPostTap(context, currentPost),
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: PostListItem(
+              post: currentPost,
+              onTap: () => _onPostTap(context, currentPost),
+            ),
           );
         },
       ),
@@ -110,5 +112,9 @@ class _PostListScreenState extends State<PostListScreen> {
     final postsBloc = context.read<PostBloc>();
 
     postsBloc.add(GetAllPosts());
+  }
+
+  void _onNewPostButtonPressed(BuildContext context) {
+    PostCreationScreen.navigateTo(context);
   }
 }

@@ -28,10 +28,14 @@ class PostListItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 10),
-                  Text(post.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 10),
-                  Text(post.description),
+                  Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(post.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(6.0),
+                    child: Text(post.description),
+                  ),
                 ],
               ),
             ),
