@@ -7,13 +7,13 @@ import '../../shared/repositories/post_repository.dart';
 
 
 part 'post_event.dart';
-part 'post_state.dart';
+part 'post_list_state.dart';
 
 
-class PostBloc extends Bloc<PostEvent, PostState> {
+class PostBloc extends Bloc<PostEvent, PostListState> {
   final PostRepository postRepository;
 
-  PostBloc({required this.postRepository}) : super(const PostState()) {
+  PostBloc({required this.postRepository}) : super(const PostListState()) {
     on<GetAllPosts>((event, emit) async {
       emit(state.copyWith(status: Status.loading));
 

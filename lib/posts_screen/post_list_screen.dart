@@ -1,3 +1,4 @@
+import 'package:cc_flutter/posts_screen/post_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,7 +28,7 @@ class _PostListScreenState extends State<PostListScreen> {
             child: Text('Posts')
         ),
       ),
-      body: BlocBuilder<PostBloc, PostState>(builder: (context, state) {
+      body: BlocBuilder<PostBloc, PostListState>(builder: (context, state) {
         return Expanded(
           child: switch (state.status) {
             Status.loading => _buildLoading(),
@@ -37,6 +38,14 @@ class _PostListScreenState extends State<PostListScreen> {
           },
         );
       }),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          debugPrint("Floating action button pressed on main screen");
+        },
+        icon: const Icon(Icons.add),
+        label: const Text('New Post'),
+        backgroundColor: Colors.white,
+      ),
     );
   }
 
@@ -52,7 +61,7 @@ class _PostListScreenState extends State<PostListScreen> {
     );
   }
 
-  Widget _buildSuccess(PostState state) {
+  Widget _buildSuccess(PostListState state) {
     return RefreshIndicator(
       onRefresh: () async {
         _getAllPosts();
@@ -64,12 +73,16 @@ class _PostListScreenState extends State<PostListScreen> {
           Post currentPost = state.posts[index];
 
           return PostListItem(
-            title: currentPost.title,
-            description: currentPost.description,
+            post: currentPost,
+            onTap: () => _onPostTap(context, currentPost),
           );
         },
       ),
     );
+  }
+
+  void _onPostTap(BuildContext context, Post post) {
+    PostDetailScreen.navigateTo(context, post);
   }
 
   Widget _buildError() {
