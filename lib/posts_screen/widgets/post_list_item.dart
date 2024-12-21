@@ -1,14 +1,18 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
+
+import '../../shared/models/post.dart';
 
 class PostListItem extends StatelessWidget {
   const PostListItem({
     super.key,
-    this.title,
-    this.description,
+    required this.post,
+    required this.onTap,
   });
 
-  final String? title;
-  final String? description;
+  final Post post;
+  final GestureTapCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +20,7 @@ class PostListItem extends StatelessWidget {
         clipBehavior: Clip.hardEdge,
         child: InkWell(
           splashColor: Colors.blue.withAlpha(30),
-          onTap: () {
-            debugPrint("Card tapped yoowww");
-          },
+          onTap: onTap,
             child: SizedBox(
               width: 400,
               height: 80,
@@ -27,9 +29,9 @@ class PostListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 10),
-                  Text(title ?? "Empty title", style: const TextStyle(fontWeight: FontWeight.bold)),
+                  Text(post.title, style: const TextStyle(fontWeight: FontWeight.bold)),
                   const SizedBox(height: 10),
-                  Text(description ?? "Empty title"),
+                  Text(post.description),
                 ],
               ),
             ),

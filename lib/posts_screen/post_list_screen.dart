@@ -1,3 +1,4 @@
+import 'package:cc_flutter/posts_screen/post_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -72,12 +73,16 @@ class _PostListScreenState extends State<PostListScreen> {
           Post currentPost = state.posts[index];
 
           return PostListItem(
-            title: currentPost.title,
-            description: currentPost.description,
+            post: currentPost,
+            onTap: () => _onPostTap(context, currentPost),
           );
         },
       ),
     );
+  }
+
+  void _onPostTap(BuildContext context, Post post) {
+    PostDetailScreen.navigateTo(context, post);
   }
 
   Widget _buildError() {
