@@ -1,6 +1,7 @@
 part of 'post_creation_bloc.dart';
 
 enum Status {
+  input,
   loading,
   success,
   failure,
