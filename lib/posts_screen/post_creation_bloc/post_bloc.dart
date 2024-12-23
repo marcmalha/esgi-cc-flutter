@@ -1,18 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:cc_flutter/shared/models/post.dart';
-import 'package:flutter/rendering.dart';
 
 import '../../shared/exceptions/app_exception.dart';
 import '../../shared/repositories/post_repository.dart';
 
-part 'post_creation_event.dart';
-part 'post_creation_state.dart';
+part 'post_event.dart';
+part 'post_state.dart';
 
 
-class PostCreationBloc extends Bloc<PostCreationEvent, PostCreationState> {
+class PostBloc extends Bloc<PostEvent, PostState> {
   final PostRepository postRepository;
 
-  PostCreationBloc({required this.postRepository}) : super(const PostCreationState()) {
+  PostBloc({required this.postRepository}) : super(const PostState()) {
     on<PostInput>((event, emit) {
       emit(state.copyWith(status: Status.input));
     });

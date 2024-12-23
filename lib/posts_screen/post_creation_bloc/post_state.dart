@@ -1,4 +1,4 @@
-part of 'post_creation_bloc.dart';
+part of 'post_bloc.dart';
 
 enum Status {
   input,
@@ -7,19 +7,19 @@ enum Status {
   failure,
 }
 
-class PostCreationState {
+class PostState {
   final Status status;
   final Post? post;
   final AppException? exception;
 
-  const PostCreationState({
+  const PostState({
     this.status = Status.loading,
     this.post,
     this.exception,
   });
 
-  PostCreationState copyWith({required Status status, Post? post, AppException? exception}) {
-    return PostCreationState(
+  PostState copyWith({required Status status, Post? post, AppException? exception}) {
+    return PostState(
         status: status,
         post: post,
         exception: exception

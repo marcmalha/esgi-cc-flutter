@@ -1,7 +1,7 @@
-import 'package:cc_flutter/posts_screen/post_creation_bloc/post_creation_bloc.dart';
+import 'package:cc_flutter/posts_screen/post_creation_bloc/post_bloc.dart';
 import 'package:cc_flutter/posts_screen/post_creation_screen.dart';
 import 'package:cc_flutter/posts_screen/post_detail_screen.dart';
-import 'package:cc_flutter/posts_screen/post_list_bloc/post_bloc.dart';
+import 'package:cc_flutter/posts_screen/post_list_bloc/post_list_bloc.dart';
 import 'package:cc_flutter/posts_screen/post_list_screen.dart';
 import 'package:cc_flutter/shared/data_sources/post/fake_data_source.dart';
 import 'package:cc_flutter/shared/models/post.dart';
@@ -24,8 +24,8 @@ class MyApp extends StatelessWidget {
 
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (BuildContext context) => PostBloc(postRepository: postsRepository),),
-          BlocProvider(create: (BuildContext context) => PostCreationBloc(postRepository: postsRepository), ),
+          BlocProvider(create: (BuildContext context) => PostListBloc(postRepository: postsRepository),),
+          BlocProvider(create: (BuildContext context) => PostBloc(postRepository: postsRepository), ),
         ],
         child: MaterialApp(
           title: 'Flutter CC',

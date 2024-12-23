@@ -1,6 +1,6 @@
 import 'package:cc_flutter/posts_screen/post_creation_screen.dart';
 import 'package:cc_flutter/posts_screen/post_detail_screen.dart';
-import 'package:cc_flutter/posts_screen/post_list_bloc/post_bloc.dart';
+import 'package:cc_flutter/posts_screen/post_list_bloc/post_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,7 +33,7 @@ class _PostListScreenState extends State<PostListScreen> {
             child: Text('Posts')
         ),
       ),
-      body: BlocBuilder<PostBloc, PostListState>(builder: (context, state) {
+      body: BlocBuilder<PostListBloc, PostListState>(builder: (context, state) {
         return Container(
           child: switch (state.status) {
             Status.loading => _buildLoading(),
@@ -118,7 +118,7 @@ class _PostListScreenState extends State<PostListScreen> {
   }
 
   void _getAllPosts() {
-    final postsBloc = context.read<PostBloc>();
+    final postsBloc = context.read<PostListBloc>();
 
     postsBloc.add(GetAllPosts());
   }

@@ -1,4 +1,4 @@
-part of 'post_bloc.dart';
+part of 'post_list_bloc.dart';
 
 enum Status {
   loading,

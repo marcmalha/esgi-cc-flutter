@@ -1,5 +1,5 @@
-import 'package:cc_flutter/posts_screen/post_creation_bloc/post_creation_bloc.dart';
-import 'package:cc_flutter/posts_screen/post_list_bloc/post_bloc.dart' hide Status;
+import 'package:cc_flutter/posts_screen/post_creation_bloc/post_bloc.dart';
+import 'package:cc_flutter/posts_screen/post_list_bloc/post_list_bloc.dart' hide Status;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +23,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<PostCreationBloc>()
+    context.read<PostBloc>()
       .add(PostInput());
   }
 
@@ -43,7 +43,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
           child: Text('Create Post')
         ),
       ),
-      body: BlocBuilder<PostCreationBloc, PostCreationState>(builder: (context, state) {
+      body: BlocBuilder<PostBloc, PostState>(builder: (context, state) {
         return Container(
           child: switch (state.status) {
             Status.input => _buildInputForm(context),
@@ -108,7 +108,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
                             description: descriptionController.text,
                           );
 
-                          context.read<PostCreationBloc>()
+                          context.read<PostBloc>()
                               .add(PostCreated(newPost));
                         }
                       },
@@ -171,7 +171,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
   }
 
   void _navigateBack() {
-    context.read<PostBloc>()
+    context.read<PostListBloc>()
         .add(GetAllPosts());
     Navigator.pop(context);
   }
