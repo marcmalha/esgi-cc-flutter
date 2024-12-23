@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cc_flutter/posts_screen/post_edit_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../shared/models/post.dart';
@@ -23,6 +24,12 @@ class PostDetailScreen extends StatelessWidget {
         title: Center(
             child: Text(post.title)
         ),
+        actions: [
+          IconButton(onPressed: () {
+            PostEditScreen.navigateTo(context, post);
+          },
+              icon: const Icon(Icons.edit))
+        ],
       ),
       body: Center(
         child: Text(post.description),

@@ -5,26 +5,33 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../shared/models/post.dart';
 
-class PostCreationScreen extends StatefulWidget {
-  static Future<void> navigateTo(BuildContext context) {
-    return Navigator.pushNamed(context, '/create');
+class PostEditScreen extends StatefulWidget {
+  final Post post;
+
+  static Future<void> navigateTo(BuildContext context, Post post) {
+    return Navigator.pushNamed(context, 'postEdit', arguments: post);
   }
 
-  const PostCreationScreen({super.key});
+  const PostEditScreen({super.key, required this.post});
 
   @override
-  State<PostCreationScreen> createState() => _PostCreationScreenState();
+  State<PostEditScreen> createState() => _PostEditScreenState();
 }
 
-class _PostCreationScreenState extends State<PostCreationScreen> {
+class _PostEditScreenState extends State<PostEditScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  late Post _post;
 
   @override
   void initState() {
     super.initState();
+    _post = widget.post;
+    titleController.text = _post.title;
+    descriptionController.text = _post.description;
+
     context.read<PostBloc>()
-      .add(PostCreating());
+        .add(PostEditing());
   }
 
   @override
@@ -38,27 +45,33 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Center(
-          child: Text('Create Post')
+        appBar: AppBar(
+          title: const Center(
+              child: Text('Edit Post')
+          ),
+          actions: [
+            IconButton(onPressed: () {
+
+            },
+                icon: const Icon(Icons.edit))
+          ],
         ),
-      ),
-      body: BlocBuilder<PostBloc, PostState>(builder: (context, state) {
-        return Container(
-          child: switch (state.status) {
-            Status.creating => _buildInputForm(context),
-            Status.loading => _showLoading(context),
-            Status.success => _showSuccess(context),
-            Status.failure => _showFailure(context),
-            Status.editing => _showFailure(context),
-          },
-        );
-      })
+        body: BlocBuilder<PostBloc, PostState>(builder: (context, state) {
+          return Container(
+            child: switch (state.status) {
+              Status.editing => _showEditing(context),
+              Status.loading => _showLoading(context),
+              Status.success => _showSuccess(context),
+              Status.failure => _showFailure(context),
+              Status.creating => _showFailure(context),
+            },
+          );
+        })
     );
   }
 
 
-  Widget _buildInputForm(BuildContext context) {
+  Widget _showEditing(BuildContext context) {
     return
       Form(
           child: Builder(builder: (context) {
@@ -110,10 +123,10 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
                           );
 
                           context.read<PostBloc>()
-                              .add(PostCreated(newPost));
+                              .add(PostEdited(_post, newPost));
                         }
                       },
-                      child: const Text('Submit'),
+                      child: const Text('Save'),
                     ),
                   )
                 ],
@@ -129,7 +142,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text("Your post was successfully created!", style: TextStyle(fontSize: 20),),
+          const Text("Your post was successfully edited!", style: TextStyle(fontSize: 20),),
           ElevatedButton(
             onPressed: _navigateBack,
             style: ElevatedButton.styleFrom(
@@ -156,7 +169,7 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text("Error creating post", style: TextStyle(fontSize: 20),),
+          const Text("Error editing post", style: TextStyle(fontSize: 20),),
           ElevatedButton(
             onPressed: _navigateBack,
             style: ElevatedButton.styleFrom(
@@ -174,6 +187,8 @@ class _PostCreationScreenState extends State<PostCreationScreen> {
   void _navigateBack() {
     context.read<PostListBloc>()
         .add(GetAllPosts());
+
     Navigator.pop(context);
+    Navigator.popAndPushNamed(context, 'postDetail', arguments: _post);
   }
 }

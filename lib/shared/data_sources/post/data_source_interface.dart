@@ -8,5 +8,5 @@ abstract class PostDataSource {
 
     Future<Post> getPost(int postIndex);
 
-    Future<Post> updatePost(int postIndex, {String? newTitle, String? newDescription});
+    Future<Post> updatePost(Post post, {String? newTitle, String? newDescription});
 }

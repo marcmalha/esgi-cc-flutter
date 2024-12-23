@@ -12,8 +12,12 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   final PostRepository postRepository;
 
   PostBloc({required this.postRepository}) : super(const PostState()) {
-    on<PostInput>((event, emit) {
-      emit(state.copyWith(status: Status.input));
+    on<PostEditing>((event, emit) {
+      emit(state.copyWith(status: Status.editing));
+    });
+
+    on<PostCreating>((event, emit) {
+      emit(state.copyWith(status: Status.creating));
     });
 
     on<PostCreated>((event, emit) async {
@@ -21,6 +25,24 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
       final newPost = event.post;
       final response = await postRepository.createPost(newPost);
+
+      if (response == null) {
+        emit(state.copyWith(status: Status.failure));
+      } else {
+        emit(state.copyWith(status: Status.success, post: newPost));
+      }
+    });
+
+    on<PostEdited>((event, emit) async {
+      emit(state.copyWith(status: Status.loading));
+
+      final oldPost = event.oldPost;
+      final newPost = event.newPost;
+      final response = await postRepository.updatePost(
+          oldPost,
+          newTitle: newPost.title,
+          newDescription: newPost.description
+      );
 
       if (response == null) {
         emit(state.copyWith(status: Status.failure));

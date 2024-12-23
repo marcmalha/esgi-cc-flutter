@@ -1,6 +1,7 @@
 import 'package:cc_flutter/posts_screen/post_creation_bloc/post_bloc.dart';
 import 'package:cc_flutter/posts_screen/post_creation_screen.dart';
 import 'package:cc_flutter/posts_screen/post_detail_screen.dart';
+import 'package:cc_flutter/posts_screen/post_edit_screen.dart';
 import 'package:cc_flutter/posts_screen/post_list_bloc/post_list_bloc.dart';
 import 'package:cc_flutter/posts_screen/post_list_screen.dart';
 import 'package:cc_flutter/shared/data_sources/post/fake_data_source.dart';
@@ -44,6 +45,11 @@ class MyApp extends StatelessWidget {
             case 'postDetail':
               if (argument is Post) {
                 screen = PostDetailScreen(post: argument);
+              }
+              break;
+            case 'postEdit':
+              if (argument is Post) {
+                screen = PostEditScreen(post: argument);
               }
               break;
           }

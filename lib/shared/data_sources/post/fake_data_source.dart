@@ -51,9 +51,11 @@ class FakeDataSource implements PostDataSource {
   }
 
   @override
-  Future<Post> updatePost(int postIndex, {String? newTitle, String? newDescription}) async {
+  Future<Post> updatePost(Post post, {String? newTitle, String? newDescription}) async {
     return Future.delayed(const Duration(milliseconds: 250), () {
-      return currentPosts[postIndex].update(
+      final currentIndex = currentPosts.indexWhere((Post curr) => curr.id == post.id);
+
+      return currentPosts[currentIndex].update(
         newTitle,
         newDescription,
       );

@@ -14,7 +14,7 @@ class PostRepository {
     return dataSource.createPost(newPost);
   }
 
-  Future<Post> updatePost(int postIndex, {String? newTitle, String? newDescription}) async {
-    return dataSource.updatePost(postIndex, newTitle: newTitle, newDescription: newDescription);
+  Future<Post?> updatePost(Post post, {String? newTitle, String? newDescription}) async {
+    return dataSource.updatePost(post, newTitle: newTitle, newDescription: newDescription);
   }
 }
