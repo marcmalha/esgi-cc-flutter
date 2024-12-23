@@ -6,14 +6,14 @@ import '../../shared/exceptions/app_exception.dart';
 import '../../shared/repositories/post_repository.dart';
 
 
-part 'post_event.dart';
+part 'post_list_event.dart';
 part 'post_list_state.dart';
 
 
-class PostBloc extends Bloc<PostEvent, PostListState> {
+class PostListBloc extends Bloc<PostListEvent, PostListState> {
   final PostRepository postRepository;
 
-  PostBloc({required this.postRepository}) : super(const PostListState()) {
+  PostListBloc({required this.postRepository}) : super(const PostListState()) {
     on<GetAllPosts>((event, emit) async {
       emit(state.copyWith(status: Status.loading));
 

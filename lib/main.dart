@@ -1,6 +1,9 @@
+import 'package:cc_flutter/posts_screen/post_creation_bloc/post_bloc.dart';
+import 'package:cc_flutter/posts_screen/post_creation_screen.dart';
 import 'package:cc_flutter/posts_screen/post_detail_screen.dart';
+import 'package:cc_flutter/posts_screen/post_edit_screen.dart';
+import 'package:cc_flutter/posts_screen/post_list_bloc/post_list_bloc.dart';
 import 'package:cc_flutter/posts_screen/post_list_screen.dart';
-import 'package:cc_flutter/posts_screen/posts_bloc/post_bloc.dart';
 import 'package:cc_flutter/shared/data_sources/post/fake_data_source.dart';
 import 'package:cc_flutter/shared/models/post.dart';
 import 'package:flutter/material.dart';
@@ -18,8 +21,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (BuildContext context) => PostBloc(postRepository: PostRepository(dataSource: FakeDataSource())),
+    final postsRepository = PostRepository(dataSource: FakeDataSource());
+
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (BuildContext context) => PostListBloc(postRepository: postsRepository),),
+          BlocProvider(create: (BuildContext context) => PostBloc(postRepository: postsRepository), ),
+        ],
         child: MaterialApp(
           title: 'Flutter CC',
           theme: ThemeData(
@@ -28,6 +36,7 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           '/': (context) => const PostListScreen(),
+          '/create': (context) => const PostCreationScreen(),
         },
         onGenerateRoute: (routeSettings) {
           Widget screen = Container(color: Colors.pink);
@@ -36,6 +45,11 @@ class MyApp extends StatelessWidget {
             case 'postDetail':
               if (argument is Post) {
                 screen = PostDetailScreen(post: argument);
+              }
+              break;
+            case 'postEdit':
+              if (argument is Post) {
+                screen = PostEditScreen(post: argument);
               }
               break;
           }

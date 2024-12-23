@@ -9,4 +9,13 @@ class Post {
     required this.title,
     required this.description,
   });
+
+  Post update(String? newTitle, String? newDescription)
+  {
+    title = newTitle ?? title;
+    description = newDescription ?? description;
+
+    return this;
+  }
+
 }

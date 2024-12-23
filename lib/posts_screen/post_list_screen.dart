@@ -1,12 +1,17 @@
+import 'package:cc_flutter/posts_screen/post_creation_screen.dart';
 import 'package:cc_flutter/posts_screen/post_detail_screen.dart';
+import 'package:cc_flutter/posts_screen/post_list_bloc/post_list_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../shared/models/post.dart';
-import 'posts_bloc/post_bloc.dart';
 import 'widgets/post_list_item.dart';
 
 class PostListScreen extends StatefulWidget {
+  static Future<void> navigateTo(BuildContext context) {
+    return Navigator.pushNamed(context, '/');
+  }
+
   const PostListScreen({super.key});
 
   @override
@@ -28,8 +33,8 @@ class _PostListScreenState extends State<PostListScreen> {
             child: Text('Posts')
         ),
       ),
-      body: BlocBuilder<PostBloc, PostListState>(builder: (context, state) {
-        return Expanded(
+      body: BlocBuilder<PostListBloc, PostListState>(builder: (context, state) {
+        return Container(
           child: switch (state.status) {
             Status.loading => _buildLoading(),
             Status.empty => _buildEmpty(),
@@ -39,9 +44,7 @@ class _PostListScreenState extends State<PostListScreen> {
         );
       }),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          debugPrint("Floating action button pressed on main screen");
-        },
+        onPressed: () => _onNewPostButtonPressed(context),
         icon: const Icon(Icons.add),
         label: const Text('New Post'),
         backgroundColor: Colors.white,
@@ -56,9 +59,14 @@ class _PostListScreenState extends State<PostListScreen> {
   }
 
   Widget _buildEmpty() {
-    return const Center(
-      child: Text('No Posts currently available'),
-    );
+    return RefreshIndicator(
+      onRefresh: () async {
+        _getAllPosts();
+      },
+      child: const Center(
+          child: Text('No Posts currently available'),
+        )
+      );
   }
 
   Widget _buildSuccess(PostListState state) {
@@ -72,9 +80,12 @@ class _PostListScreenState extends State<PostListScreen> {
         itemBuilder: (context, index) {
           Post currentPost = state.posts[index];
 
-          return PostListItem(
-            post: currentPost,
-            onTap: () => _onPostTap(context, currentPost),
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: PostListItem(
+              post: currentPost,
+              onTap: () => _onPostTap(context, currentPost),
+            ),
           );
         },
       ),
@@ -107,8 +118,12 @@ class _PostListScreenState extends State<PostListScreen> {
   }
 
   void _getAllPosts() {
-    final postsBloc = context.read<PostBloc>();
+    final postsBloc = context.read<PostListBloc>();
 
     postsBloc.add(GetAllPosts());
+  }
+
+  void _onNewPostButtonPressed(BuildContext context) {
+    PostCreationScreen.navigateTo(context);
   }
 }
